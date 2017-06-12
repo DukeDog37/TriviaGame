@@ -1,0 +1,43 @@
+
+
+/*Override the jumbotron background with image*/
+.jumbotron{
+
+    background-image: "../images/JumboBack.jpg";
+}
+
+/* Styling for the crystal images */
+.Crystals{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+    border-top-style: inset;
+    border-bottom-style: inset;
+}
+
+/* Styling the background for the Crystal Div columns */
+.col-md-3{
+	background-color: #ADD8E6
+}
+
+#clsFeedback{
+    text-align: center;
+    border-style: inset;
+    text-shadow: 3px 2px #ADD8E6;
+    background-color: white;
+
+}
+.col-md-4{
+    text-align: center;
+    border-style: inset;
+    text-shadow: 3px 2px #ADD8E6;
+}
+
+.footer{
+    position: relative;
+    font-size: 24px;
+
+    height: 75px;
+    text-align: center;
+    background-color: #f5f5f5;
+}

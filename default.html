@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Custom CSS for overrides as needed -->
+      <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Javascript file contianing main functions -->
+      <script src="assets/javascript/game.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+</head>
+<body>
+
+
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+      <!--This is where the count down goes -->
+      <p id = "TimeRemain">Overall Game Timer</p>
+      <br>
+      <p id = "qTRemain">Questions Reviewed: 0</p>
+    </div>
+    <div class="col-sm-6 text-left"> 
+      <h1 style="text-align: center;">Quiz</h1>
+        <div id = "TestSection">
+          <p id="q">Placeholder</p>
+          <form>
+            <div id="rd1" class="radio-inline">
+              <label id="lbl1"></label>
+            </div>
+            <div id="rd2" class="radio-inline">
+              <label id="lbl2"></label>
+            </div>
+            <div id="rd3" class="radio-inline">
+              <label id="lbl3"></label>
+            </div>
+            <div id="rd4" class="radio-inline">
+              <label id="lbl4"></label>
+            </div>
+          </form>
+
+        </div>
+        <div>
+          <h1 id="#loserNote"></h1>
+        </div>
+      
+    </div>
+    <div class="col-sm-2 text-left">
+      <button type="button" class="btn btn-primary" onclick="startQuiz()">Start Trivia Game</button>
+      <br><br>
+      <button type="button" class="btn btn-danger" onclick="stopQuiz()">Stop Trivia Game</button>
+      <br><br>
+      <table id="demo"></table>
+    </div>
+    <!-- <div class="col-sm-2">
+      <img class="img-responsive" src="assets/images/mainlogo.jpg" alt="Cast" width="200" height="300"> 
+      
+    </div> -->
+  </div>
+</div>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer>
+<script type="text/javascript">
+
+
+var timeLeft = 30;
+var qtimeLeft = 3;
+intQR = 1;
+var timerId;
+var qtimerId;
+var data;
+var userScore = 0; 
+
+function countdown() {
+  if (timeLeft == 0) {
+    clearTimeout(timerId);
+    $("TimeRemain").text("Out of Time");
+    //myFunction();
+  } else {
+    $("#TimeRemain").text(timeLeft + ' seconds remaining');
+    timeLeft--;
+  }
+}
+
+function qcountdown() {
+  
+  var userSelected = "";
+
+  if (qtimeLeft == 0) {
+    clearTimeout(qTimerId);
+    $("#qTRemain").text(qtimeLeft);
+    //end the game
+    //check the final score
+    //alert the score
+  } else if(intQR == 10){
+      //end the game
+      //check the final score
+    //alert the score
+  }
+
+  else{
+    $("#qTRemain").text("Quetions Reviewed: " + intQR)
+    //this is where the question answer check and reset goes
+    console.log("intQR: " + intQR);
+    console.log("The correct answer for question " + intQR + " is:" + data.Ans);
+    //if user checked correct radio button add 1 to userScore
+    if ($("#rdo1").prop("checked")==true) {
+      userSelected = $("#rdo1").prop("value");
+    }
+    if ($("#rdo2").prop("checked")==true) {
+      userSelected = $("#rdo2").prop("value");
+    }
+    if ($("#rdo3").prop("checked")==true) {
+      userSelected = $("#rdo3").prop("value");
+    }
+    if ($("#rdo4").prop("checked")==true) {
+      userSelected = $("#rdo4").prop("value");
+    }
+    //check selection value against data answer value
+    if(userSelected == data.Ans){
+      userScore++;
+    }
+    else{
+        //insert an image here
+        
+
+    }
+    console.log("User score is now: "+userScore);
+    //set up next question
+    data = fnGetQuestion(intQR);
+    fnPopulateQuiz(data);
+    intQR++;
+    
+  }
+}
+
+var QCount = 0;
+$("#start").click(startQuiz);
+
+// This function will replace display whatever image it's given
+// in the 'src' attribute of the img tag.
+function displayImage() {
+  $("#q").html("<p>Welcome to the Trivia Game.  Press start to begin.</p>");
+}
+
+
+function startQuiz() {
+  //start the timer
+  timerId = setInterval(countdown, 1000);
+  //set and start the 3 second question timer
+  qTimerId = setInterval(qcountdown, 3000);
+
+  data = fnGetQuestion(0); //get first question
+  console.log(data);
+  fnPopulateQuiz(data);//call function to set form elements to first quiz question
+
+}
+  
+
+  
+function stopQuiz() {
+clearInterval(timerId);
+clearInterval(qTimerId);
+
+  
+}
+
+// This will run the display image function as soon as the page loads.
+displayImage();
+
+</script>
+</body>
+</html>
