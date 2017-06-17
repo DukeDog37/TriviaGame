@@ -57,6 +57,17 @@ function fnPopulateQuiz(data){
   $("#lbl4").html("<input id = 'rdo4' type='radio' name='optradio' value='"+ data.Optd +"'>"+data.Optd);
   
 }
+
+function fnPushWrongAnsImage(imgIdx){
+//WrongAnsImg
+  var arrayImages = ["assets/images/Kramer_Crazy.jpg", "assets/images/Elaine_crazy.jpg", "assets/images/George_amICrazy.jpg"];
+  console.log(arrayImages[imgIdx]);
+  $("#WrongAnsImg").attr('src', ''); // Clear the src
+  $("#WrongAnsImg").attr('src', arrayImages[imgIdx]);
+  console.log("after jquery to replace wrong answer image should have run");
+  //<img class="img-responsive" src="assets/images/mainlogo.jpg" alt="Cast" width="200" height="300">
+
+}
 /*    
       
       <p>5. Where did Jerry's parents live?</p>
