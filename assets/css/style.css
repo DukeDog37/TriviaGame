@@ -50,3 +50,34 @@
 
     font-size: 26px;
 }
+
+.radio-inline{
+
+  font-size: 14px;
+}
+#q{
+  font-size: 26px;
+}
+.img-responsive {
+    opacity: 1.0;
+    
+}
+#imgScroll{
+
+  border-width: 5px;
+  border-color: red;
+}
+#GifScroll{
+  border-width: 5px;
+  border-color: red;
+}
+#divGif{
+
+  border-width: 5px;
+  border-color: red;
+}
+#divImg{
+
+  border-width: 5px;
+  border-color: red;
+}

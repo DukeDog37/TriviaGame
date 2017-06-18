@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Seinfeld Trivia Game</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,21 +20,19 @@
   <div class="row content">
     <div class="col-sm-2 sidenav">
       <!--This is where the count down goes -->
-      <p id = "TimeRemain">Timer</p>
+      <p id = "TimeRemain"></p>
       <br>
-      <p id = "qTRemain">Questions Reviewed: 0</p>
+      <p id = "qTRemain"></p>
       <br><br>
       <button id = "btnStart" type="button" class="btn btn-primary" onclick="startQuiz()">Start Trivia Game</button>
       <br><br>
-      <button id = "btnStop" type="button" class="btn btn-danger" onclick="stopQuiz()">Stop Trivia Game</button>
-      <br><br>
-      <button id = "btnResults" type="button" class="btn btn-warning" onclick="showResults()">Check your score</button>
       </div>
     <div class="col-sm-8 text-left"> 
-      <h1 style="text-align: center; background-image: 'assets/images/1200px-Seinfeld_logo.png'">Quiz</h1>
+      
+      <img class="img-responsive" src="assets/images/1200px-Seinfeld_logo.png" alt="Seinfeld Quiz" opacity="0.5">
       <br><br>
         <div id = "TestSection">
-          <p id="q">Placeholder</p>
+          <p id="q"></p>
           <form>
             <div id="rd1" class="radio-inline">
               <label id="lbl1"></label>
@@ -49,46 +47,39 @@
               <label id="lbl4"></label>
             </div>
           </form>
-
+          <h2 id="Correct"></h2>
+          <h2 id="InCorrect"></h2>
+          <h2 id="UnAnswered"></h2>
         </div>
-        <div>
-          <img id = "WrongAnsImg" src="assets/images/mainlogo.jpg" width="200" height="300">
-        </div>
+        
       
     </div>
-    <div class="col-sm-2 text-left">
-      <img class="img-responsive" src="assets/images/mainlogo.jpg" alt="Cast" width="200" height="300"> 
+    <div id="divImg" class="col-sm-2 text-left">
+      <img id="imgScroll" class="img-responsive" src="" alt="" width="200" height="200"> 
       <table id="demo"></table>
     </div>
-    
+    <br><br>
+    <div id="divGif" class="col-sm-2 text-left">
+      <img id="GifScroll" class="img-responsive" src="" alt="" width="200" height="200"> 
+      <table id="demo"></table>
+    </div>
   </div>
 </div>
 
 <footer class="container-fluid text-center" style = "background-color: grey">
-  <p>Footer Text</p>
+  <p>GW Bootcamp Trivia Game - Jason Henry</p>
 </footer>
 <script type="text/javascript">
 
 //$(document).ready(function() {
-      var timeLeft = 30;
       var qtimeLeft = 3;
-      intQR = 1;
-      var timerId;
+      var intQR = 1;
       var qtimerId;
+      var imgTimerId;
       var data;
       var userScore = 0;
-      var userWrongCount = 0; 
-
-      function countdown() {
-        if (timeLeft == 0) {
-          clearTimeout(timerId);
-          $("#TimeRemain").text("Out of Time");
-          //myFunction();
-        } else {
-          $("#TimeRemain").text(timeLeft + ' seconds remaining');
-          timeLeft--;
-        }
-      }
+      var userWrongCount = 0;
+      var userNoInput = 0; 
 
       function qcountdown() {
         
@@ -96,21 +87,13 @@
 
         if (qtimeLeft == 0) {
           clearTimeout(qTimerId);
-          $("#qTRemain").text(qtimeLeft);
-          //end the game
-          //check the final score
-          //alert the score
-        } else if(intQR == 10){
-            //end the game
-            //check the final score
-          //alert the score
+          showResults();
+        } else if(intQR == 11){
+          //alert("intQR is 10");
+          clearTimeout(qTimerId);
+          showResults();
         }
-
         else{
-          $("#qTRemain").text("Quetions Reviewed: " + intQR)
-          //this is where the question answer check and reset goes
-          console.log("intQR: " + intQR);
-          console.log("The correct answer for question " + intQR + " is:" + data.Ans);
           //if user checked correct radio button add 1 to userScore
           if ($("#rdo1").prop("checked")==true) {
             userSelected = $("#rdo1").prop("value");
@@ -128,73 +111,54 @@
           if(userSelected == data.Ans){
             userScore++;
           }
+          else if(userSelected == ""){
+              userNoInput++;
+          }
           else{
               //insert an image here
               userWrongCount++;
-
-              fnPushWrongAnsImage(userWrongCount-1);
-
-
           }
-          console.log("User score is now: "+userScore);
+          if (intQR < 11) {
           //set up next question
           data = fnGetQuestion(intQR);
-          fnPopulateQuiz(data);
+          fnPopulateQuiz(data, intQR);
           intQR++;
+        }
           
         }
       }
 
-      // This function will replace display whatever image it's given
-      // in the 'src' attribute of the img tag.
+      function scrollImg(){
+
+        var rndNum = 0;
+        rndNum = Math.floor((Math.random() * 9) + 1);
+        fnImages(rndNum);
+        CycleGif(rndNum);
+      }
+
       function displayImage() {
         $('#btnStart').prop('disabled',false).css('opacity',1.0);
-        $('#btnStop').prop('disabled',true).css('opacity',0.5);
-        $('#btnResults').prop('disabled',true).css('opacity',0.5);
         $("#q").html("<p>Welcome to the Trivia Game.  Press start to begin.</p>");
       }
 
 
       function startQuiz() {
+        alert("You will get 7 seconds to answer each quesiton.  Good Luck!");
         //start the timer
-        timerId = setInterval(countdown, 1000);
-        //set and start the 3 second question timer
-        qTimerId = setInterval(qcountdown, 5000);
-
+        imgTimerId = setInterval(scrollImg, 3000);
+        qTimerId = setInterval(qcountdown, 7000);
         data = fnGetQuestion(0); //get first question
-        console.log(data);
-        fnPopulateQuiz(data);//call function to set form elements to first quiz question
+        fnPopulateQuiz(data, intQR);//call function to set form elements to first quiz question
         //disable the start button
         $('#btnStart').prop('disabled',true).css('opacity',0.5);
-        $('#btnStop').prop('disabled',false).css('opacity',1.0);
-        $('#btnResults').prop('disabled',true).css('opacity',0.5);
+        
       }
-              
-      function stopQuiz() {
-      clearInterval(timerId);
-      clearInterval(qTimerId);
-      //enable the start button
-      $('#btnStart').prop('disabled',false).css('opacity',1.0);
-      $('#btnStop').prop('disabled',true).css('opacity',0.5);
-      $('#btnResults').prop('disabled',false).css('opacity',1.0);
-      }
-
-      function showResults(){
-
-        alert("You got " + userScore + " Out of 10 Correct");
-        //change HTML element to better luck next time with gif if score less than 70% or 7 correct
-        if(userScore<7){
-          alert("bad");
-        }
-        else{
-          alert("good");
-
-        }
-
-      }
+       //At game end this will display the results of the quiz       
+      function showResults(){fnResults(userScore, userWrongCount);}
       // This will run the display image function as soon as the page loads.
       displayImage();
-      //});
+
+      
   
 </script>
 </body>
